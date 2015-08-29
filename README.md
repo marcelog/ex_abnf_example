@@ -3,7 +3,7 @@
 
 This is a sample application that demonstrates the use of [ex_abnf](https://github.com/marcelog/ex_abnf) to
 implement [ABNF](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_Form) grammar parsers in
-[Elixir](http://elixir-lang.org).
+[Elixir](http://elixir-lang.org). The original article/tutorial for this application is located at [http://marcelog.github.io/articles/abnf_grammars_in_elixir.html](http://marcelog.github.io/articles/abnf_grammars_in_elixir.html).
 
 The [sample grammar](https://github.com/marcelog/ex_abnf_example/blob/master/priv/postal_code.abnf) is
 taken from the [ABNF wiki](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_Form#Example) and

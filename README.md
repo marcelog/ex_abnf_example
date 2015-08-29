@@ -1,5 +1,5 @@
-ABNFApp
-=======
+# ex_abnf_example
+
 
 This is a sample application that demonstrates the use of [ex_abnf](https://github.com/marcelog/ex_abnf) to
 implement [ABNF](https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_Form) grammar parsers in

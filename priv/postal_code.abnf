@@ -1,0 +1,122 @@
+!!!
+###
+# These are some helper functions and macros used throughout the parser
+###
+require Logger
+def get_val(token) do
+  case :lists.flatten(token) do
+    [] -> nil
+    r -> hd r
+  end
+end
+
+defmacro to_s() do
+  quote do
+    _ = var!(string_values)
+    _ = var!(values)
+    state = var!(state)
+    rule = var!(rule)
+    {:ok, state, to_string(rule)}
+  end
+end
+!!!
+
+; This grammar is taken from
+; https://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_Form#Example
+postal-address   = name-part street zip-part !!!
+  _ = rule
+  _ = string_values
+  [name, street, zip] = values
+  {:ok, state, %{
+    name: get_val(name),
+    street: get_val(street),
+    zip: get_val(zip)
+  }}
+!!!
+
+name-part        = personal-part SP *(personal-part SP) [suffix] CRLF !!!
+  _ = rule
+  _ = values
+  # Remove CRLF and get the name
+  [_|name] = Enum.reverse string_values
+  name = to_string Enum.reverse(name)
+  {:ok, state, name}
+!!!
+
+personal-part    = first-name / (initial ".") !!! to_s !!!
+
+first-name       = *ALPHA !!! to_s !!!
+
+initial          = ALPHA !!! to_s !!!
+
+last-name        = *ALPHA !!! to_s !!!
+
+suffix           = ("Jr." / "Sr." / 1*("I" / "V" / "X")) !!! to_s !!!
+
+street           = [apt SP] house-num SP street-name CRLF !!!
+  _ = rule
+  _ = string_values
+  [apt, house, _, street, _] = values
+  apt = get_val apt
+  house = get_val house
+  street = get_val street
+  {:ok, state, %{
+    apartment: apt,
+    house: house,
+    street: street
+  }}
+!!!
+
+apt              = 1*4DIGIT !!!
+  _ = values
+  _ = string_values
+  {apt, ""} = Integer.parse to_string(rule)
+  {:ok, state, apt}
+!!!
+
+house-num        = 1*8(DIGIT / ALPHA) !!! to_s !!!
+
+street-name      = 1*VCHAR !!! to_s !!!
+
+zip-part         = town-name "," SP state 1*2SP zip-code CRLF !!!
+  _ = rule
+  _ = string_values
+  [town, _, _, st, _, zip, _] = values
+  town = get_val town
+  st = get_val st
+  zip = get_val zip
+  {:ok, state, %{
+    town: town,
+    state: st,
+    zip: zip
+  }}
+!!!
+
+town-name        = 1*(ALPHA / SP) !!! to_s !!!
+
+state            = 2ALPHA !!! to_s !!!
+
+zip-code         = 5DIGIT ["-" 4DIGIT] !!!
+  _ = rule
+  _ = values
+  [code, extended] = string_values
+  {code, ""} = Integer.parse to_string(code)
+  extended = case extended do
+    [] -> nil
+    [?-|extended] ->
+      {extended, ""} = Integer.parse to_string(extended)
+      extended
+  end
+  {:ok, state, %{
+    code: code,
+    extended: extended
+  }}
+!!!
+
+DIGIT = %x30-39 ; Decimal digits (0-9)
+ALPHA = %x41-5A / %x61-7A ; Upper and lower case ASCII letters (A-Z, a-z)
+VCHAR = %x21-7E  ; visible (printing) characters
+SP = %x20 ; space
+CRLF = CR LF ; Internet standard newline
+CR = %x0D ; carriage return
+LF = %x0A ; linefeed

@@ -43,15 +43,15 @@ name-part        = personal-part SP *(personal-part SP) [suffix] CRLF !!!
   {:ok, state, name}
 !!!
 
-personal-part    = first-name / (initial ".") !!! to_s !!!
+personal-part    = first-name / (initial ".") !!! to_s() !!!
 
-first-name       = *ALPHA !!! to_s !!!
+first-name       = *ALPHA !!! to_s() !!!
 
-initial          = ALPHA !!! to_s !!!
+initial          = ALPHA !!! to_s() !!!
 
-last-name        = *ALPHA !!! to_s !!!
+last-name        = *ALPHA !!! to_s() !!!
 
-suffix           = ("Jr." / "Sr." / 1*("I" / "V" / "X")) !!! to_s !!!
+suffix           = ("Jr." / "Sr." / 1*("I" / "V" / "X")) !!! to_s() !!!
 
 street           = [apt SP] house-num SP street-name CRLF !!!
   _ = rule
@@ -74,9 +74,9 @@ apt              = 1*4DIGIT !!!
   {:ok, state, apt}
 !!!
 
-house-num        = 1*8(DIGIT / ALPHA) !!! to_s !!!
+house-num        = 1*8(DIGIT / ALPHA) !!! to_s() !!!
 
-street-name      = 1*VCHAR !!! to_s !!!
+street-name      = 1*VCHAR !!! to_s() !!!
 
 zip-part         = town-name "," SP state 1*2SP zip-code CRLF !!!
   _ = rule
@@ -92,9 +92,9 @@ zip-part         = town-name "," SP state 1*2SP zip-code CRLF !!!
   }}
 !!!
 
-town-name        = 1*(ALPHA / SP) !!! to_s !!!
+town-name        = 1*(ALPHA / SP) !!! to_s() !!!
 
-state            = 2ALPHA !!! to_s !!!
+state            = 2ALPHA !!! to_s() !!!
 
 zip-code         = 5DIGIT ["-" 4DIGIT] !!!
   _ = rule

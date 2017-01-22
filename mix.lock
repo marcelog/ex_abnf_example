@@ -1,1 +1,1 @@
-%{"ex_abnf": {:hex, :ex_abnf, "0.2.5"}}
+%{"ex_abnf": {:hex, :ex_abnf, "0.3.0", "07847d0d6cb75b779948520d02cba80eb855e18acb1aa8d43b1e370ef31afbcb", [:mix], []}}
